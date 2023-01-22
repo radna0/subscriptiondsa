@@ -1,5 +1,10 @@
 const { initializeApp } = require('firebase/app')
-const { getFirestore, collection, getDocs, doc } = require('firebase/firestore')
+const {
+  getFirestore,
+  collection,
+  query,
+  getDocs,
+} = require('firebase/firestore')
 const config = {
   apiKey: 'AIzaSyDiOuVXm_8TWb_IjYoqFdFy76LOWHNHXww',
   authDomain: 'subscriptiondsa.firebaseapp.com',
@@ -13,7 +18,6 @@ const config = {
 const appfB = initializeApp(config)
 const db = getFirestore(appfB)
 const emailRef = collection(db, 'emails')
-const TimeZoneRef = collection(db, 'timezones')
 
 async function getEmails() {
   const docSnap = await getDocs(emailRef)
@@ -23,20 +27,10 @@ async function getEmails() {
   })
   return emails
 }
-async function getTimeZones() {
-  const docSnap = await getDocs(TimeZoneRef)
-  const zones = []
-  docSnap.forEach((doc) => {
-    zones.push({ ...doc.data() })
-  })
-  return zones
-}
 
 module.exports = {
   appfB,
   emailRef,
   getEmails,
-  TimeZoneRef,
-  getTimeZones,
   db,
 }

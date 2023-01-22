@@ -1,6 +1,7 @@
 var cron = require('node-cron')
 const { doc, setDoc } = require('firebase/firestore')
-const { emailRef, TimeZoneRef, getTimeZones } = require('./firebase')
+const { emailRef } = require('./firebase')
+const { LeetCode } = require('leetcode-query')
 
 const handleEmail = async ({ email, timeZone }) => {
   await setDoc(doc(emailRef), {
@@ -8,17 +9,18 @@ const handleEmail = async ({ email, timeZone }) => {
     TimeZone: timeZone,
   })
 }
-const handleTimeZone = async ({ timeZone }) => {
-  await setDoc(doc(TimeZoneRef), {
-    TimeZone: timeZone,
-  })
-}
 
-const handleSchedule = async () => {
-  const allTimeZones = await getTimeZones()
+const handleSchedule = async (TimeZone) => {
+  // const leetcode = new LeetCode()
 
-  const saved = '0 7 */1 */1 *'
-  const ScheduleExe = (TimeZone) => {
+  // const problems = await leetcode.problems({
+  //   limit: 10,
+  //   filters: {
+  //     difficulty: 'EASY',
+  //   },
+  // })
+  // const saved = '0 7 */1 */1 *'
+  const ScheduleExe = () => {
     const task = cron.schedule(
       '*/5 * * * * *',
       () => {
@@ -32,16 +34,13 @@ const handleSchedule = async () => {
     task.start()
     return task
   }
-  allTimeZones.forEach((storedTimeZone) => {
-    const task = ScheduleExe(storedTimeZone.TimeZone)
-    const timer = cron.schedule('*/5 * * * * *', () => {
-      task.stop()
-    })
+  const task = ScheduleExe()
+  cron.schedule('*/5 * * * * *', () => {
+    task.stop()
   })
 }
 
 module.exports = {
   handleEmail,
-  handleTimeZone,
   handleSchedule,
 }
