@@ -41,7 +41,6 @@ const Subscription: React.FC<ISubscription> = ({ handleSubscription }) => {
       })
       .then((data) => handleSubscription(true))
       .catch((e) => handleError(e.message))
-      .finally(() => fetch(`${process.env.NEXT_PUBLIC_GET_API_ENV}`))
     setLoading(false)
   }
   return (

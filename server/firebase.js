@@ -4,15 +4,18 @@ const {
   collection,
   query,
   getDocs,
+  where,
 } = require('firebase/firestore')
+require('dotenv').config()
+
 const config = {
-  apiKey: 'AIzaSyDiOuVXm_8TWb_IjYoqFdFy76LOWHNHXww',
-  authDomain: 'subscriptiondsa.firebaseapp.com',
-  projectId: 'subscriptiondsa',
-  storageBucket: 'subscriptiondsa.appspot.com',
-  messagingSenderId: '540951610498',
-  appId: '1:540951610498:web:e330e252a8028f2ff8209b',
-  measurementId: 'G-PSL2XYS6H4',
+  apiKey: `${process.env.EXPRESS_APIKEY}`,
+  authDomain: `${process.env.EXPRESS_AUTHDOMAIN}`,
+  projectId: `${process.env.EXPRESS_PROJECTID}`,
+  storageBucket: `${process.env.EXPRESS_STORAGEBUCKET}`,
+  messagingSenderId: `${process.env.EXPRESS_MESSAGINGSENDERID}`,
+  appId: `${process.env.EXPRESS_APPID}`,
+  measurementId: `${process.env.EXPRESS_MEASUREMENTID}`,
 }
 
 const appfB = initializeApp(config)
@@ -27,10 +30,20 @@ async function getEmails() {
   })
   return emails
 }
+async function getEmailsByTimeZone(TimeZone) {
+  const q = query(emailRef, where('TimeZone', '==', TimeZone))
+  const docSnap = await getDocs(q)
+  const emails = []
+  docSnap.forEach((doc) => {
+    emails.push({ ...doc.data(), id: doc.id })
+  })
+  return emails
+}
 
 module.exports = {
   appfB,
   emailRef,
   getEmails,
+  getEmailsByTimeZone,
   db,
 }
