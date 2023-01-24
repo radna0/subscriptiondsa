@@ -12,10 +12,11 @@ app.use(express.json())
 //   let data = await response.json()
 //   return data
 // }
-// app.get('/', async (req, res) => {
-//   const problems = await handleGivingProblems()
-//   res.json(problems)
-// })
+app.delete('/', async (req, res) => {
+  const { id } = req.body
+  // const problems = await handleGivingProblems()
+  res.json(id)
+})
 app.post(`${process.env.EXPRESS_POST_ENDPOINT_ENV}`, async (req, res) => {
   try {
     const { email, timeZone } = req.body
@@ -28,7 +29,7 @@ app.post(`${process.env.EXPRESS_POST_ENDPOINT_ENV}`, async (req, res) => {
 
     res.status(200).json('Success')
   } catch (e) {
-    res.status(409).send(e)
+    res.status(409).json(e)
   }
 })
 module.exports = app

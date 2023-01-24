@@ -27,6 +27,7 @@ async function endEmail(data) {
     TimeZone: '',
   })
 }
+async function delEmail() {}
 
 const totalQuestions = async (difficulty) => {
   const leetcode = new LeetCode()
@@ -62,8 +63,13 @@ const handleGivingProblems = async () => {
   const res = []
   const total = await totalQuestions(probAlgo.difficulty)
   while (res.length != probAlgo.total) {
-    const prob = await randomProblem(total, 1, probAlgo.difficulty)
+    const prob = await randomProblem(
+      total,
+      Math.floor(probAlgo / 3),
+      probAlgo.difficulty
+    )
     for (let data of prob) {
+      if (res.length === probAlgo.total) break
       if (!data.isPaidOnly) res.push(data.titleSlug)
     }
   }
@@ -97,6 +103,7 @@ const handleSchedule = (TimeZone) => {
                   day: user.Day,
                   problem: problem.title,
                   link: problem.titleSlug,
+                  id: user.id,
                 },
                 routing: {
                   method: 'single',
