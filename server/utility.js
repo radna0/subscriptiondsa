@@ -1,5 +1,5 @@
 var cron = require('node-cron')
-const { doc, setDoc, updateDoc } = require('firebase/firestore')
+const { doc, setDoc, updateDoc, deleteDoc } = require('firebase/firestore')
 const { emailRef, getEmailsByTimeZone } = require('./firebase')
 const { LeetCode } = require('leetcode-query')
 const { probAlgo } = require('./resouces')
@@ -27,7 +27,10 @@ async function endEmail(data) {
     TimeZone: '',
   })
 }
-async function delEmail() {}
+async function delEmail(id) {
+  const res = await deleteDoc(doc(emailRef, id))
+  return res
+}
 
 const totalQuestions = async (difficulty) => {
   const leetcode = new LeetCode()
@@ -65,11 +68,11 @@ const handleGivingProblems = async () => {
   while (res.length != probAlgo.total) {
     const prob = await randomProblem(
       total,
-      Math.floor(probAlgo / 3),
+      Math.floor(probAlgo.total / 3),
       probAlgo.difficulty
     )
     for (let data of prob) {
-      if (res.length === probAlgo.total) break
+      if (res.length == probAlgo.total) break
       if (!data.isPaidOnly) res.push(data.titleSlug)
     }
   }
@@ -92,7 +95,6 @@ const handleSchedule = (TimeZone) => {
             const probTitle = user.Problems[random]
             const leetcode = new LeetCode()
             const problem = await leetcode.problem(probTitle)
-            console.log(user.id, user.Email, problem.title, user.Day)
             const { requestId } = await courier.send({
               message: {
                 to: {
@@ -144,6 +146,7 @@ const handleSchedule = (TimeZone) => {
 
 module.exports = {
   handleEmail,
+  delEmail,
   handleGivingProblems,
   handleSchedule,
 }

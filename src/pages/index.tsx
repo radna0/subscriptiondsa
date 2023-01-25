@@ -11,18 +11,19 @@ export default function Home() {
   }
   return (
     <>
-      <>
-        {subscribed ? (
-          <div>
-            <Subscribed></Subscribed>
-          </div>
-        ) : (
-          <div>
-            <Quote />
-            <Subscription handleSubscription={handleSubscription} />
-          </div>
-        )}
-      </>
+      {subscribed ? (
+        <div>
+          <Subscribed
+            mainTxt={'You Have Successfully Subscribed!'}
+            subTxt={'Your Coding Journey Awaits!!!'}
+          />
+        </div>
+      ) : (
+        <div>
+          <Quote />
+          <Subscription handleSubscription={handleSubscription} />
+        </div>
+      )}
     </>
   )
 }

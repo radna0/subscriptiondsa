@@ -30,6 +30,16 @@ async function getEmails() {
   })
   return emails
 }
+async function findEmail(email) {
+  const q = query(emailRef, where('Email', '==', email))
+  const docSnap = await getDocs(q)
+  let found
+  docSnap.forEach((doc) => {
+    if (found) return
+    found = doc.id
+  })
+  return found
+}
 async function getEmailsByTimeZone(TimeZone) {
   const q = query(emailRef, where('TimeZone', '==', TimeZone))
   const docSnap = await getDocs(q)
@@ -44,6 +54,7 @@ module.exports = {
   appfB,
   emailRef,
   getEmails,
+  findEmail,
   getEmailsByTimeZone,
   db,
 }

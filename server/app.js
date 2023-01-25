@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require('cors')
-const { getEmails } = require('./firebase')
-const { handleEmail, handleGivingProblems } = require('./utility')
+const { findEmail } = require('./firebase')
+const { handleEmail, delEmail, handleGivingProblems } = require('./utility')
 require('dotenv').config()
 
 const app = express()
@@ -12,17 +12,19 @@ app.use(express.json())
 //   let data = await response.json()
 //   return data
 // }
-app.delete('/', async (req, res) => {
-  const { id } = req.body
-  // const problems = await handleGivingProblems()
-  res.json(id)
+app.delete(`${process.env.EXPRESS_DELETE_ENDPOINT_ENV}`, async (req, res) => {
+  try {
+    const { id } = req.body
+    const deleted = await delEmail(id)
+    res.status(200).json(deleted)
+  } catch (e) {
+    res.status(409).json(e)
+  }
 })
 app.post(`${process.env.EXPRESS_POST_ENDPOINT_ENV}`, async (req, res) => {
   try {
     const { email, timeZone } = req.body
-
-    const allEmails = await getEmails()
-    const found = allEmails.find((storedEmail) => storedEmail.Email == email)
+    const found = await findEmail(email)
     if (found) throw new Error('Duplicate Entry')
     const problems = await handleGivingProblems()
     await handleEmail({ email, timeZone, problems })

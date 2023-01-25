@@ -17,6 +17,11 @@ interface IhandlePostEmail {
 }
 interface IhandleDelEmail {
   id: unknown
+  handleSubscription: handleStateSubscription
+}
+interface ISubscribed {
+  mainTxt: string
+  subTxt: string
 }
 type ThandlePostEmail = (props: IhandlePostEmail) => Promise<void>
 type ThandleDelEmail = (props: IhandleDelEmail) => Promise<void>
@@ -26,6 +31,7 @@ export type {
   handleStateForm,
   IBtn,
   ISubscription,
+  ISubscribed,
   ThandlePostEmail,
   ThandleDelEmail,
 }

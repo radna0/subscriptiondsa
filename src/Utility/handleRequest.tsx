@@ -29,10 +29,12 @@ export const handlePostEmail: ThandlePostEmail = async ({
   }
 }
 
-export const handleDelEmail: ThandleDelEmail = async ({ id }) => {
+export const handleDelEmail: ThandleDelEmail = async ({
+  id,
+  handleSubscription,
+}) => {
   try {
-    if (!id) throw new Error('Invalid ID')
-    const res = await fetch(`${process.env.NEXT_PUBLIC_POST_API_ENV}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_DELETE_API_ENV}`, {
       method: 'DELETE',
       headers: {
         'Access-Control-Allow-Origin': '*',
@@ -43,8 +45,7 @@ export const handleDelEmail: ThandleDelEmail = async ({ id }) => {
       }),
     })
     if (!res.ok) throw new Error('Already Unsubscribed!')
-    const data = await res.json()
-    console.log(data)
+    handleSubscription(true)
   } catch (e) {
     let message = 'Unknown Error'
     if (e instanceof Error) message = e.message
