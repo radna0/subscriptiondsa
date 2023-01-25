@@ -1,7 +1,5 @@
 const app = require('./app')
 const { handleSchedule } = require('./utility')
-const { CourierClient } = require('@trycourier/courier')
-
 require('dotenv').config()
 
 app.listen(process.env.EXPRESS_PORT, async () => {
