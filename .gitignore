@@ -32,6 +32,5 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-
 # Keep environment variables out of version control
 .env
