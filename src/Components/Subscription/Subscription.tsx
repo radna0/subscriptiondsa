@@ -14,25 +14,23 @@ const Subscription: React.FC<ISubscription> = ({ handleSubscription }) => {
   const [error, setError] = useState('')
 
   const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+    handleError('')
     setEmail(e.target.value)
   }
   const handleError: handleStateError = (val) => {
     setError(val)
   }
-  useEffect(() => {
-    if (!EmailRegex.test(email)) handleError('Invalid Email Address!')
-    else handleError('')
-  }, [email])
   const handleForm: handleStateForm = async (e) => {
     e.preventDefault()
-    if (!email || error) return
+    if (!EmailRegex.test(email)) handleError('Invalid Email Address!')
+    if (!email.length || !EmailRegex.test(email)) return
     setLoading(true)
     await handlePostEmail({ email, handleSubscription, handleError })
     setLoading(false)
   }
   return (
     <div className=" mt-10">
-      <form onSubmit={handleForm} action="">
+      <form onSubmit={handleForm}>
         <div className="flex items-center flex-col mx-16">
           <input
             onChange={handleEmail}

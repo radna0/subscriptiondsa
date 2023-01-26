@@ -18,7 +18,6 @@ export default function Items() {
 
   const handleForm: handleStateForm = async (e) => {
     const id = query.id
-    console.log(id)
     e.preventDefault()
     setLoading(true)
     await handleDelEmail({ id, handleSubscription })
